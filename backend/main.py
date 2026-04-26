@@ -10,7 +10,7 @@ spatial_engine = SpatialEngine()
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["http://localhost:3000", "http://localhost:3001"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -26,6 +26,8 @@ class TradeoffVector(BaseModel):
     carbon_score: float
     biodiversity_score: float
     food_security_score: float
+    water_risk_score: float
+    soil_risk_score: float
 
 class ScenarioResponse(BaseModel):
     current_use: str

@@ -63,7 +63,9 @@ export default function Home() {
           tradeoff_vector: {
             carbon_score: isForest ? -0.4 : 0.6,
             biodiversity_score: isForest ? -0.8 : 0.3,
-            food_security_score: -0.5
+            food_security_score: -0.5,
+            water_risk_score: 0.2,
+            soil_risk_score: 0.1
           },
           confidence: 0.85,
           red_flags: isForest ? ["Critical: Project involves conversion of primary forest"] : ["Loss of food production area"],
@@ -164,6 +166,8 @@ export default function Home() {
                   <ScoreBar label="Carbon Storage" score={result.tradeoff_vector.carbon_score} color="emerald" />
                   <ScoreBar label="Biodiversity" score={result.tradeoff_vector.biodiversity_score} color="blue" />
                   <ScoreBar label="Food Security" score={result.tradeoff_vector.food_security_score} color="orange" />
+                  <ScoreBar label="Water Quality" score={result.tradeoff_vector.water_risk_score} color="cyan" />
+                  <ScoreBar label="Soil Integrity" score={result.tradeoff_vector.soil_risk_score} color="amber" />
                 </div>
 
                 <div className="space-y-6 pt-6 border-t border-slate-100">

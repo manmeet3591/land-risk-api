@@ -4,7 +4,7 @@ start-backend:
 	cd backend && source venv/bin/activate && export DYLD_LIBRARY_PATH=/opt/homebrew/opt/gdal/lib:$$DYLD_LIBRARY_PATH && python main.py
 
 start-frontend:
-	cd frontend && npm run dev
+	cd frontend && npm run dev -- -p 3001
 
 dev:
 	@echo "Starting backend and frontend..."

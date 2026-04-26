@@ -1,0 +1,3 @@
+THREAT,MAX_DIST,WEIGHT,DECAY
+agriculture,5.0,1.0,linear
+urban,10.0,1.0,exponential
