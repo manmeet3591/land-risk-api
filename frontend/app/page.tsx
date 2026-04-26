@@ -32,11 +32,13 @@ export default function Home() {
 
     setLoading(true);
     try {
-      // Logic for local dev vs production
+      // Use environment variable for production, fallback to localhost for dev
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
       const isLocal = window.location.hostname === "localhost";
-      const apiBase = isLocal ? "http://localhost:8000" : null;
 
-      if (apiBase) {
+      // If we are on the live site but no production API URL is set, 
+      // we use the mock fallback. Otherwise, we hit the real API.
+      if (isLocal || process.env.NEXT_PUBLIC_API_URL) {
         const response = await fetch(`${apiBase}/v1/score-scenario`, {
           method: "POST",
           headers: {
