@@ -9,23 +9,50 @@ export default function Home() {
   const runMockDemo = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:8000/v1/score-scenario", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          location: "Amazon Rainforest Basin",
-          current_use: "cropland",
-          proposed_use: "reforestation",
-          area_hectares: 1000,
-        }),
-      });
-      const data = await response.json();
-      setResult(data);
+      // On the live GitHub Pages site, the backend won't be running.
+      // We check if we are on localhost; if not, we use the mock data directly.
+      if (window.location.hostname === "localhost") {
+        const response = await fetch("http://localhost:8000/v1/score-scenario", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            location: "Amazon Rainforest Basin",
+            current_use: "cropland",
+            proposed_use: "reforestation",
+            area_hectares: 1000,
+          }),
+        });
+        const data = await response.json();
+        setResult(data);
+      } else {
+        // Fallback for live demo on GitHub Pages
+        await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate delay
+        setResult({
+          tradeoff_vector: {
+            carbon_score: 0.85,
+            biodiversity_score: 0.42,
+            food_security_score: -0.61
+          },
+          confidence: 0.78,
+          red_flags: ["High food production displacement detected (Live Demo Mode)"],
+          recommendation: "Consider agroforestry to mitigate food security loss."
+        });
+      }
     } catch (error) {
       console.error("Error fetching mock data:", error);
-      alert("Make sure the backend is running at http://localhost:8000");
+      // Fallback in case of any error
+      setResult({
+        tradeoff_vector: {
+          carbon_score: 0.85,
+          biodiversity_score: 0.42,
+          food_security_score: -0.61
+        },
+        confidence: 0.78,
+        red_flags: ["Simulated data (Backend connection failed)"],
+        recommendation: "Consider agroforestry to mitigate food security loss."
+      });
     } finally {
       setLoading(false);
     }
