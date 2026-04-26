@@ -1,7 +1,7 @@
 .PHONY: start-backend start-frontend dev
 
 start-backend:
-	cd backend && source venv/bin/activate && python3 main.py
+	cd backend && source venv/bin/activate && export DYLD_LIBRARY_PATH=/opt/homebrew/opt/gdal/lib:$$DYLD_LIBRARY_PATH && python main.py
 
 start-frontend:
 	cd frontend && npm run dev

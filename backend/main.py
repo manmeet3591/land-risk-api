@@ -34,6 +34,11 @@ class ScenarioResponse(BaseModel):
     red_flags: List[str]
     recommendation: str
 
+@app.on_event("startup")
+async def startup_event():
+    print("✅ Land Risk Science Engine (InVEST) Initialized")
+    print("🚀 API live at http://localhost:8000")
+
 @app.get("/health")
 def health_check():
     return {"status": "healthy"}
