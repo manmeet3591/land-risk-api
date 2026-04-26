@@ -1,9 +1,11 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
+from services.spatial_engine import SpatialEngine
 
 app = FastAPI(title="Land Risk API")
+spatial_engine = SpatialEngine()
 
 # Configure CORS
 app.add_middleware(
@@ -15,8 +17,8 @@ app.add_middleware(
 )
 
 class ScenarioRequest(BaseModel):
-    location: str
-    current_use: str
+    lat: float
+    lng: float
     proposed_use: str
     area_hectares: float
 
@@ -26,6 +28,7 @@ class TradeoffVector(BaseModel):
     food_security_score: float
 
 class ScenarioResponse(BaseModel):
+    current_use: str
     tradeoff_vector: TradeoffVector
     confidence: float
     red_flags: List[str]
@@ -37,17 +40,17 @@ def health_check():
 
 @app.post("/v1/score-scenario", response_model=ScenarioResponse)
 async def score_scenario(request: ScenarioRequest):
-    # Mock data for initial frontend integration
-    return ScenarioResponse(
-        tradeoff_vector=TradeoffVector(
-            carbon_score=0.85,
-            biodiversity_score=0.42,
-            food_security_score=-0.61
-        ),
-        confidence=0.78,
-        red_flags=["High food production displacement detected"],
-        recommendation="Consider agroforestry to mitigate food security loss."
-    )
+    try:
+        result = spatial_engine.calculate_tradeoffs(
+            lat=request.lat, 
+            lng=request.lng, 
+            proposed_use=request.proposed_use
+        )
+        return result
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 if __name__ == "__main__":
     import uvicorn

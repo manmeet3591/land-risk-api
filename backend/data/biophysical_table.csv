@@ -1,0 +1,8 @@
+lucode,name,c_stock,biodiversity,food_security
+1,Primary Forest,280,0.95,0.05
+2,Reforested Land,180,0.75,0.10
+3,Grassland,60,0.50,0.20
+4,Cropland,40,0.25,0.90
+5,Bioenergy Crop,90,0.15,0.30
+6,Urban/Built-up,10,0.05,0.00
+7,Agroforestry,140,0.65,0.40
